@@ -121,3 +121,4 @@ config 상수 파일 설정
 
 
 "# AlaskaVue" 
+"# AlaskaVUE" 
