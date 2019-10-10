@@ -1,0 +1,75 @@
+{
+  "name": "AlaskaVue",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "//SERVE//": " --- SERVE --- ",
+    "serve:dev": "vue-cli-service serve --mode dev",
+    "serve:prod": "vue-cli-service serve --mode prod",
+    "//BUILD//": " --- BUILD --- ",
+    "dev": "vue-cli-service build --mode dev",
+    "prod": "vue-cli-service build --mode prod",
+    "zip": "npm run clean:distZip && vue-cli-service build --mode zip",
+    "//DEPLOYMENT & ZIP//": " --- DEPLOYMENT & ZIP --- ",
+    "deploy": "npm run zip && npm run clean:app && npm run copy:distZip && npm run unzip:distZip",
+    "copy:distZip": "run-script-os",
+    "copy:distZip:win32": "xcopy /I /S \"./distZip\" \"../webContainer/apps/%npm_package_name%\"",
+    "copy:distZip:darwin:linux": "[ -d ../webContainer/apps/$npm_package_name ] && cp -rv ./distZip/* ../webContainer/apps/$npm_package_name || mkdir ../webContainer/apps/$npm_package_name && cp -rv ./distZip/* ../webContainer/apps/$npm_package_name",
+    "unzip:distZip": "run-script-os",
+    "unzip:distZip:win32": "cd ../webContainer/apps/%npm_package_name% && unzip -o *.zip && del *.zip",
+    "unzip:distZip:darwin:linux": "cd ../webContainer/apps/$npm_package_name && unzip -o *.zip && rm *.zip",
+    "clean:app": "run-script-os",
+    "clean:app:win32": "if exist %npm_package_name% cd ../webContainer/apps/%npm_package_name% && for %j in (*) do if not %j==README.md del /s /q %j",
+    "clean:app:darwin:linux": "[ -d ../webContainer/apps/$npm_package_name ] && cd ../webContainer/apps/$npm_package_name && rm -rf * || echo \"$npm_package_name not exist\"",
+    "clean:distZip": "run-script-os",
+    "clean:distZip:win32": "if exist distZip cd ./distZip && del /f *.zip",
+    "clean:distZip:darwin:linux": "[ -d ./distZip ] && cd ./distZip && rm *.zip || echo \"distZip not exist\""
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "core-js": "^2.6.5",
+    "vue": "^2.6.10",
+    "vue-router": "^3.0.7",
+    "vuex": "^3.1.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.10.0",
+    "@vue/cli-plugin-eslint": "^3.10.0",
+    "@vue/cli-service": "^3.10.0",
+    "babel-eslint": "^10.0.1",
+    "clean-webpack-plugin": "^3.0.0",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "path": "^0.12.7",
+    "run-script-os": "^1.0.7",
+    "vue-template-compiler": "^2.6.10",
+    "webpack-merge": "^4.2.1",
+    "zip-webpack-plugin": "^3.0.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    },
+    "globals": {
+      "logUtil": false
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ]
+}
